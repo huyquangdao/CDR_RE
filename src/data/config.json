@@ -1,0 +1,8 @@
+{
+    "train_file_path":"data/raw_data/cdr_train.txt",
+    "dev_file_path": "data/raw_data/cdr_dev.txt",
+    "test_file_path": "data/raw_data/cdr_test.txt",
+    "use_title": true,
+    "use_full": true,
+    "mesh_filtering":true
+}
