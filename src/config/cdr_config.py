@@ -44,15 +44,16 @@ class CDRConfig:
 
     @staticmethod
     def validate_json_data(json_data: dict) -> None:
-        """validate the json data dictionary
+        """validate the json data
 
         Args:
-            json_data (dict): [description]
+            json_data (dict): the dictionary that contains param, value pairs after loading the json data.
 
-        Returns:
-            bool: [description]
+        Raises:
+            Exception: there are some compulsory params which were not defined.
+            Exception: contain any param name which not in KEY_NAMES_LIST
+            Exception: param type doesn't match. eg given: int and expected: str.
         """
-
         if len(json_data) < len(KEY_NAMES_LIST):
             missing_params = [key for key in KEY_NAMES_LIST if key not in list(json_data.keys())]
             raise Exception(f"params: {missing_params} must be defined")
