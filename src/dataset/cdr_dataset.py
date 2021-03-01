@@ -5,6 +5,10 @@ from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm_notebook
 
 
+ner_vocab = {"O": 0, "B_Chemical": 1, "I_Chemical": 2, "B_Disease": 3, "I_Disease": 4}
+ner_idx2label = {0: "O", 1: "B_Chemical", 2: "I_Chemical", 3: "B_Disease", 4: "I_Disease"}
+
+
 def pad_sequences(list_token_ids, max_length, pad_idx):
     padded_list_token_ids = []
     padded_seq_mask = []
@@ -210,15 +214,15 @@ class CDRDataset(Dataset):
 
         # ok
         padded_list_token_ids, padded_list_token_mask = pad_sequences(
-            list_token_ids, batch_max_length, word_vocab["<PAD>"]
+            list_token_ids, batch_max_length, self.word_vocab["<PAD>"]
         )
-        padded_list_pos_ids, _ = pad_sequences(list_pos_ids, batch_max_length, pos_vocab["<PAD>"])
+        padded_list_pos_ids, _ = pad_sequences(list_pos_ids, batch_max_length, self.pos_vocab["<PAD>"])
 
         padded_list_ner_ids, _ = pad_sequences(list_ner_label_ids, batch_max_length, ner_vocab["O"])
 
         # ok
         padded_list_char_ids = pad_characters(
-            list_char_ids, batch_max_length, self.max_char_length, char_vocab["<PAD>"]
+            list_char_ids, batch_max_length, self.max_char_length, self.char_vocab["<PAD>"]
         )
 
         padded_list_hypernym_ids, _ = pad_sequences(list_hypernym_ids, batch_max_length, self.hypernym_vocab["0"])
@@ -246,10 +250,10 @@ class CDRDataset(Dataset):
         )
 
         padded_in_edges_idx, padded_in_edges_mask = pad_nodes(
-            list_in_edge_label_ids, batch_max_length, self.max_node_in, rel_vocab["<PAD>"]
+            list_in_edge_label_ids, batch_max_length, self.max_node_in, self.rel_vocab["<PAD>"]
         )
         padded_out_edges_idx, padded_out_edges_mask = pad_nodes(
-            list_out_edge_label_ids, batch_max_length, self.max_node_out, rel_vocab["<PAD>"]
+            list_out_edge_label_ids, batch_max_length, self.max_node_out, self.rel_vocab["<PAD>"]
         )
 
         token_ids_tensor = torch.LongTensor(padded_list_token_ids)
