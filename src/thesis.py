@@ -5,6 +5,7 @@ import sys
 from config.cdr_config import CDRConfig
 from corpus.cdr_corpus import CDRCorpus
 from dataset.cdr_dataset import CDRDataset
+from torch.utils.data import DataLoader
 
 
 def say_hello(text: str) -> None:
@@ -37,7 +38,7 @@ if __name__ == "__main__":
         all_doc_synonym_ids,
         all_entity_mapping,
         all_ner_labels,
-    ), labels = corpus.prepare_features_for_one_dataset(
+    ), elmo_tensor_dict, flair_tensor_dict, labels = corpus.prepare_features_for_one_dataset(
         config.train_file_path, config.train_elmo_path, config.train_flair_path
     )
 
@@ -51,8 +52,8 @@ if __name__ == "__main__":
         all_doc_char_ids,
         all_doc_hypernym_ids,
         all_doc_synonym_ids,
-        None,
-        None,
+        elmo_tensor_dict,
+        flair_tensor_dict,
         all_entity_mapping,
         all_ner_labels,
         labels,
@@ -61,3 +62,12 @@ if __name__ == "__main__":
     train_dataset.set_vocabs(
         corpus.word_vocab, corpus.rel_vocab, corpus.pos_vocab, corpus.hypernym_vocab, corpus.synonym_vocab
     )
+
+    train_loader = DataLoader(train_dataset, 2, shuffle= True, collate_fn=train_dataset.collate_fn)
+
+    from batch in train_loader:
+        for t in batch:
+            print(t.shape)
+        break
+    
+    
