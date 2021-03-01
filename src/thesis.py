@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     train_loader = DataLoader(train_dataset, 2, shuffle= True, collate_fn=train_dataset.collate_fn)
 
-    from batch in train_loader:
+    for batch in train_loader:
         for t in batch:
             print(t.shape)
         break

@@ -335,6 +335,7 @@ class CDRDataset(Dataset):
         self.pos_vocab = pos_vocab
         self.hypernym_vocab = hypernym_vocab
         self.synonym_vocab = synonym_vocab
+        self.idx2word = {k:v for v,k in self.word_vocab.items()}
 
     def __getitem__(self, idx):
 
@@ -348,7 +349,7 @@ class CDRDataset(Dataset):
             label_ids = 0
 
         token_ids = self.all_doc_token_ids[pud_id]
-        token_texts = [idx2word[x] for x in token_ids]
+        token_texts = [self.idx2word[x] for x in token_ids]
 
         in_nodes_idx = self.all_in_nodes_idx[pud_id]
         in_edge_label_ids = self.all_in_edge_label_ids[pud_id]
