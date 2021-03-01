@@ -4,14 +4,47 @@ from __future__ import annotations
 
 import json
 
-KEY_NAMES_LIST = ["train_file_path", "dev_file_path", "test_file_path", "use_title", "mesh_filtering", "use_full"]
+KEY_NAMES_LIST = [
+    "train_file_path",
+    "dev_file_path",
+    "test_file_path",
+    "mesh_path",
+    "mesh_filtering",
+    "use_title",
+    "use_full",
+    "train_elmo_path",
+    "train_flair_path",
+    "dev_elmo_path",
+    "dev_flair_path",
+    "test_elmo_path",
+    "test_flair_path",
+    "word_vocab_path",
+    "rel_vocab_path",
+    "pos_vocab_path",
+    "char_vocab_path",
+    "hypernym_vocab_path",
+    "synonym_vocab_path",
+]
 VALUE_TYPES_DICT = {
     "train_file_path": str,
     "dev_file_path": str,
     "test_file_path": str,
+    "mesh_path": str,
     "use_title": bool,
     "mesh_filtering": bool,
     "use_full": bool,
+    "train_elmo_path": str,
+    "train_flair_path": str,
+    "dev_elmo_path": str,
+    "dev_flair_path": str,
+    "test_elmo_path": str,
+    "test_flair_path": str,
+    "word_vocab_path": str,
+    "rel_vocab_path": str,
+    "pos_vocab_path": str,
+    "char_vocab_path": str,
+    "hypernym_vocab_path": str,
+    "synonym_vocab_path": str,
 }
 
 
