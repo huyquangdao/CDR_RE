@@ -333,11 +333,12 @@ class CDRDataset(Dataset):
             label_ids_tensor,
         )
 
-    def set_vocabs(self, word_vocab, rel_vocab, pos_vocab, hypernym_vocab, synonym_vocab):
+    def set_vocabs(self, word_vocab, rel_vocab, pos_vocab, hypernym_vocab, synonym_vocab, char_vocab):
         self.word_vocab = word_vocab
         self.rel_vocab = rel_vocab
         self.pos_vocab = pos_vocab
         self.hypernym_vocab = hypernym_vocab
+        self.char_vocab = char_vocab
         self.synonym_vocab = synonym_vocab
         self.idx2word = {k:v for v,k in self.word_vocab.items()}
 
