@@ -1,2 +1,4 @@
-spacy==3.0.3
+nltk
+spacy==2.3.5
 torch==1.7.0
+tqdm
