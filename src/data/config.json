@@ -1,8 +1,21 @@
 {
-    "train_file_path":"data/raw_data/cdr_train.txt",
-    "dev_file_path": "data/raw_data/cdr_dev.txt",
-    "test_file_path": "data/raw_data/cdr_test.txt",
+    "train_file_path": "./data/rawdata/CDR_TrainingSet.PubTator.txt",
+    "dev_file_path": "./data/rawdata/CDR_DevelopmentSet.PubTator.txt",
+    "test_file_path": "./data/rawdata/CDR_TestSet.PubTator.txt",
+    "train_elmo_path": "./data/rawdata/CDR_DevelopmentSet.PubTator.txt",
+    "train_flair_path": "./data/rawdata/CDR_DevelopmentSet.PubTator.txt",
+    "dev_elmo_path": "./data/rawdata/CDR_TestSet.PubTator.txt",
+    "dev_flair_path": "./data/rawdata/CDR_TestSet.PubTator.txt",
+    "test_elmo_path": "./data/rawdata/CDR_TestSet.PubTator.txt",
+    "test_flair_path": "./data/rawdata/CDR_TestSet.PubTator.txt",
+    "mesh_path": "./data/2017MeshTree.txt",
     "use_title": true,
     "use_full": true,
-    "mesh_filtering":true
+    "mesh_filtering": true,
+    "word_vocab_path": "./data/word_vocab.json",
+    "rel_vocab_path": "./data/rel_vocab.json",
+    "pos_vocab_path": "./data/pos_vocab.json",
+    "char_vocab_path": "./data/char_vocab.json",
+    "hypernym_vocab_path": "./data/hypernym_vocab.json",
+    "synonym_vocab_path": "./data/synonym_vocab.json"
 }
