@@ -340,7 +340,7 @@ class CDRDataset(Dataset):
         self.hypernym_vocab = hypernym_vocab
         self.char_vocab = char_vocab
         self.synonym_vocab = synonym_vocab
-        self.idx2word = {k:v for v,k in self.word_vocab.items()}
+        self.idx2word = {k: v for v, k in self.word_vocab.items()}
 
     def __getitem__(self, idx):
 

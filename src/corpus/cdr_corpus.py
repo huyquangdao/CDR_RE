@@ -79,8 +79,8 @@ class CDRCorpus:
                 "You need prepare whole datasets to creative all vocab files. please use prepare_all_vocabs method"
             )
 
-        elmo_tensor = self.load_tensor(elmo_file_path)
-        flair_tensor = self.load_tensor(flair_file_path)
+        # elmo_tensor = self.load_tensor(elmo_file_path)
+        # flair_tensor = self.load_tensor(flair_file_path)
 
         return (
             self.convert_examples_to_features(
@@ -94,8 +94,8 @@ class CDRCorpus:
                 self.hypernym_vocab,
                 self.synonym_vocab,
             ),
-            elmo_tensor,
-            flair_tensor,
+            None,
+            None,
             labels,
         )
 

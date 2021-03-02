@@ -24,6 +24,36 @@ KEY_NAMES_LIST = [
     "char_vocab_path",
     "hypernym_vocab_path",
     "synonym_vocab_path",
+
+    "time_step",
+    "word_embedding_dim",
+    "rel_embedding_dim",
+    "synonym_embedding_dim",
+    "hypernym_embedding_dim",
+    "char_embedding_dim",
+    "pos_embedding_dim",
+    "encoder_hidden_size",
+    "combined_embedding_dim",
+    "transformer_attn_head",
+    "transformer_block",
+    "kernel_size",
+    "n_filters",
+    "max_seq_length",
+    "use_transformer",
+    "use_self_attentive",
+
+    "glstm_hidden_size",
+    "elmo_hidden_size",
+    "flair_hidden_size",
+    "distant_embedding_dim",
+    "max_distant",
+    "drop_out",
+    "ner_classes",
+    "relation_classes",
+    "lstm_layers",
+    "ner_hidden_size",
+    "use_ner"
+
 ]
 VALUE_TYPES_DICT = {
     "train_file_path": str,
@@ -45,6 +75,35 @@ VALUE_TYPES_DICT = {
     "char_vocab_path": str,
     "hypernym_vocab_path": str,
     "synonym_vocab_path": str,
+
+    "time_step":int,
+    "word_embedding_dim":int,
+    "rel_embedding_dim":int,
+    "synonym_embedding_dim":int,
+    "hypernym_embedding_dim":int,
+    "char_embedding_dim":int,
+    "pos_embedding_dim":int,
+    "encoder_hidden_size":int,
+    "combined_embedding_dim":int,
+    "transformer_attn_head":int,
+    "transformer_block":int,
+    "kernel_size":int,
+    "n_filters":int,
+    "max_seq_length":int,
+    "use_transformer":bool,
+    "use_self_attentive":bool,
+
+    "glstm_hidden_size":int,
+    "elmo_hidden_size":int,
+    "flair_hidden_size":int,
+    "distant_embedding_dim":int,
+    "max_distant":int,
+    "drop_out":float,
+    "ner_classes":int,
+    "relation_classes":int,
+    "lstm_layers":int,
+    "ner_hidden_size":int,
+    "use_ner":bool
 }
 
 
