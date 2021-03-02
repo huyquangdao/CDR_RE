@@ -64,6 +64,11 @@ class CDRCorpus:
         with open(tensor_file_path, "rb") as f:
             tensor = pickle.load(f)
             return tensor
+    
+    def load_numpy(self, numpy_file_path):
+        with open(numpy_file_path, 'rb') as f:
+            matrix = np.load(f)
+            return matrix
 
     def prepare_features_for_one_dataset(self, data_file_path, elmo_file_path, flair_file_path):
         in_adjacency_dict, out_adjacency_dict, entity_mapping_dict, labels = self.process_dataset(data_file_path)
@@ -79,8 +84,8 @@ class CDRCorpus:
                 "You need prepare whole datasets to creative all vocab files. please use prepare_all_vocabs method"
             )
 
-        # elmo_tensor = self.load_tensor(elmo_file_path)
-        # flair_tensor = self.load_tensor(flair_file_path)
+        elmo_tensor = self.load_tensor(elmo_file_path)
+        flair_tensor = self.load_tensor(flair_file_path)
 
         return (
             self.convert_examples_to_features(
@@ -94,8 +99,8 @@ class CDRCorpus:
                 self.hypernym_vocab,
                 self.synonym_vocab,
             ),
-            None,
-            None,
+            elmo_tensor,
+            flair_tensor,
             labels,
         )
 
