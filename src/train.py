@@ -21,7 +21,6 @@ def seed_all(seed):
     torch.cuda.manual_seed(seed)
     torch.manual_seed(seed)
 
-
 def get_mean(lis):
     return sum(lis) / len(lis)
 
