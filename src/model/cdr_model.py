@@ -71,7 +71,7 @@ class GraphEncoder(nn.Module):
         self.word_embedding_dim = word_embedding_dim
         self.pos_embedding_dim = pos_embedding_dim
         self.synonym_embedding_dim = synonym_embedding_dim
-        self.hypernym_embedding_dim = hypernym_embedding_dim 
+        self.hypernym_embedding_dim = hypernym_embedding_dim
 
         transformer_layer = nn.TransformerEncoderLayer(
             d_model=combined_embedding_dim, nhead=transformer_attn_head, dim_feedforward=1024
@@ -80,83 +80,83 @@ class GraphEncoder(nn.Module):
 
         self.use_transformer = use_transformer
 
-        self.w_h = nn.Linear(self.word_embedding_dim , self.encoder_hidden_size )
-        self.w_cell = nn.Linear(self.word_embedding_dim , self.encoder_hidden_size )
+        self.w_h = nn.Linear(self.word_embedding_dim, self.encoder_hidden_size)
+        self.w_cell = nn.Linear(self.word_embedding_dim, self.encoder_hidden_size)
 
-        self.w_in_ingate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size , bias=False)
-        self.u_in_ingate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_ingate = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
-        self.w_out_ingate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size , bias=False)
-        self.u_out_ingate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-
-        # weight for attn
-        self.k_in_ingate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.k_out_ingate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-
-        self.w_in_forgetgate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size , bias=False)
-        self.u_in_forgetgate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_forgetgate = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
-        self.w_out_forgetgate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size , bias=False)
-        self.u_out_forgetgate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
+        self.w_in_ingate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size, bias=False)
+        self.u_in_ingate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_ingate = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+        self.w_out_ingate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size, bias=False)
+        self.u_out_ingate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
         # weight for attn
-        self.k_in_forgetgate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.k_out_forgetgate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
+        self.k_in_ingate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.k_out_ingate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
-        self.w_in_outgate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size , bias=False)
-        self.u_in_outgate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_outgate = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
-        self.w_out_outgate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size , bias=False)
-        self.u_out_outgate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-
-        # weight for attn
-        self.k_in_outgate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.k_out_outgate = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-
-        self.w_in_cell = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size , bias=False)
-        self.u_in_cell = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_cell = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
-        self.w_out_cell = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size , bias=False)
-        self.u_out_cell = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
+        self.w_in_forgetgate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size, bias=False)
+        self.u_in_forgetgate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_forgetgate = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+        self.w_out_forgetgate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size, bias=False)
+        self.u_out_forgetgate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
         # weight for attn
-        self.k_in_cell = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.k_out_cell = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
+        self.k_in_forgetgate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.k_out_forgetgate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+
+        self.w_in_outgate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size, bias=False)
+        self.u_in_outgate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_outgate = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+        self.w_out_outgate = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size, bias=False)
+        self.u_out_outgate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
         # weight for attn
-        self.W_g_in = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.U_g_in = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_g_in = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
-        self.W_f_in = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.U_f_in = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_f_in = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
+        self.k_in_outgate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.k_out_outgate = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
-        self.W_o_in = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.U_o_in = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_o_in = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
+        self.w_in_cell = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size, bias=False)
+        self.u_in_cell = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_cell = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+        self.w_out_cell = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size, bias=False)
+        self.u_out_cell = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
-        self.W_g_out = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.U_g_out = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_g_out = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
-        self.W_f_out = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.U_f_out = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_f_out = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
+        # weight for attn
+        self.k_in_cell = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.k_out_cell = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
-        self.W_o_out = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.U_o_out = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
-        self.b_o_out = nn.Parameter(torch.zeros(self.encoder_hidden_size ))
+        # weight for attn
+        self.W_g_in = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.U_g_in = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_g_in = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+        self.W_f_in = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.U_f_in = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_f_in = nn.Parameter(torch.zeros(self.encoder_hidden_size))
 
-        self.W_in = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size )
-        self.W_out = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size )
+        self.W_o_in = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.U_o_in = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_o_in = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+
+        self.W_g_out = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.U_g_out = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_g_out = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+        self.W_f_out = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.U_f_out = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_f_out = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+
+        self.W_o_out = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.U_o_out = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
+        self.b_o_out = nn.Parameter(torch.zeros(self.encoder_hidden_size))
+
+        self.W_in = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size)
+        self.W_out = nn.Linear(self.combined_embedding_dim, self.encoder_hidden_size)
 
         self.use_self_atentive = False
 
         # for span attention
-        self.W_spans_in = nn.Parameter(torch.randn(2, self.encoder_hidden_size ))
-        self.ffn_alpha_in = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
+        self.W_spans_in = nn.Parameter(torch.randn(2, self.encoder_hidden_size))
+        self.ffn_alpha_in = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
-        self.W_spans_out = nn.Parameter(torch.randn(10, self.encoder_hidden_size ))
-        self.ffn_alpha_out = nn.Linear(self.encoder_hidden_size , self.encoder_hidden_size , bias=False)
+        self.W_spans_out = nn.Parameter(torch.randn(10, self.encoder_hidden_size))
+        self.ffn_alpha_out = nn.Linear(self.encoder_hidden_size, self.encoder_hidden_size, bias=False)
 
     # def cal_span_representation(self, collected_hidden_states, W_spans, ffn_alpha, mask = None):
 
@@ -493,7 +493,7 @@ class GraphStateLSTM(nn.Module):
         distant_embedding_dim,
         ner_hidden_size,
         lstm_layers,
-        use_ner = False,
+        use_ner=False,
         drop_out=0.2,
     ):
 
@@ -509,7 +509,7 @@ class GraphStateLSTM(nn.Module):
             + self.encoder.word_embedding_dim
             + self.encoder.char_embedding_dim
             + self.encoder.pos_embedding_dim
-            + ( ner_hidden_size if self.use_ner else 0 ),
+            + (ner_hidden_size if self.use_ner else 0),
             glstm_hidden_size,
         )
         self.linear_dis = nn.Linear(
@@ -519,7 +519,7 @@ class GraphStateLSTM(nn.Module):
             + self.encoder.word_embedding_dim
             + self.encoder.char_embedding_dim
             + self.encoder.pos_embedding_dim
-            + ( ner_hidden_size if self.use_ner else 0 ),
+            + (ner_hidden_size if self.use_ner else 0),
             glstm_hidden_size,
         )
 
@@ -532,10 +532,15 @@ class GraphStateLSTM(nn.Module):
         # self.ner_embedding = nn.Embedding(ner_classes, 50)
         # self.biaffine = BiaffineAttention(100, 100)
         self.ner_lstm = nn.LSTM(
-            input_size=self.encoder.encoder_hidden_size + elmo_hidden_size + flair_hidden_size + self.encoder.word_embedding_dim + self.encoder.char_embedding_dim + self.encoder.pos_embedding_dim,
+            input_size=self.encoder.encoder_hidden_size
+            + elmo_hidden_size
+            + flair_hidden_size
+            + self.encoder.word_embedding_dim
+            + self.encoder.char_embedding_dim
+            + self.encoder.pos_embedding_dim,
             hidden_size=ner_hidden_size,
             bidirectional=True,
-            num_layers= lstm_layers,
+            num_layers=lstm_layers,
         )
 
     def collect_entity_by_indices(self, representations, positions):
@@ -644,9 +649,9 @@ class GraphStateLSTM(nn.Module):
         # # ner_label_embedidng = self.ner_embedding(ner_logits.argmax(-1))
 
         if self.use_ner:
-            ner_hiddens, (h_n, c_n) = self.ner_lstm(representations.permute(1,0,2))
-            ner_logits = self.linear_ner_out(ner_hiddens.permute(1,0,2))
-            representations = torch.cat([representations, ner_hiddens.permute(1,0,2)],dim=-1)
+            ner_hiddens, (h_n, c_n) = self.ner_lstm(representations.permute(1, 0, 2))
+            ner_logits = self.linear_ner_out(ner_hiddens.permute(1, 0, 2))
+            representations = torch.cat([representations, ner_hiddens.permute(1, 0, 2)], dim=-1)
 
         collected_chem_entities = self.collect_entity_by_indices(representations, chem_entity_map_tensor)
         collected_chem_entities = collected_chem_entities * chem_entity_map_mask_tensor.unsqueeze(-1)
