@@ -11,3 +11,5 @@ def seed_all(seed):
 
 def get_mean(lis):
     return sum(lis) / len(lis)
+
+

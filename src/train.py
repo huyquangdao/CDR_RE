@@ -6,7 +6,7 @@ import numpy as np
 import random
 
 from tqdm import tqdm
-# from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 
 
 from config.cdr_config import CDRConfig
