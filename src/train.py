@@ -6,13 +6,14 @@ import numpy as np
 import random
 
 from tqdm import tqdm
-from torch.utils.tensorboard import SummaryWriter
+# from torch.utils.tensorboard import SummaryWriter
 
 
 from config.cdr_config import CDRConfig
 from dataset.cdr_dataset import CDRDataset
 from model.cdr_model import GraphEncoder, GraphStateLSTM
 from utils.metrics import compute_rel_f1, compute_NER_f1_macro, decode_ner
+from utils.utils import get_mean, seed_all
 
 
 def seed_all(seed):
@@ -20,7 +21,6 @@ def seed_all(seed):
     random.seed(seed)
     torch.cuda.manual_seed(seed)
     torch.manual_seed(seed)
-
 
 def get_mean(lis):
     return sum(lis) / len(lis)

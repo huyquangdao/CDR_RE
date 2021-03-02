@@ -64,6 +64,11 @@ class CDRCorpus:
         with open(tensor_file_path, "rb") as f:
             tensor = pickle.load(f)
             return tensor
+    
+    def load_numpy(self, numpy_file_path):
+        with open(numpy_file_path, 'rb') as f:
+            matrix = np.load(f)
+            return matrix
 
     def load_numpy(self, numpy_file_path):
         with open(numpy_file_path, "rb") as f:
