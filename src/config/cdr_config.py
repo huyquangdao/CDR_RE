@@ -24,6 +24,8 @@ KEY_NAMES_LIST = [
     "char_vocab_path",
     "hypernym_vocab_path",
     "synonym_vocab_path",
+    "word2vec_path",
+
     "time_step",
     "word_embedding_dim",
     "rel_embedding_dim",
@@ -40,6 +42,7 @@ KEY_NAMES_LIST = [
     "max_seq_length",
     "use_transformer",
     "use_self_attentive",
+
     "glstm_hidden_size",
     "elmo_hidden_size",
     "flair_hidden_size",
@@ -51,6 +54,12 @@ KEY_NAMES_LIST = [
     "lstm_layers",
     "ner_hidden_size",
     "use_ner",
+
+    "batch_size",
+    "lr",
+    "gradient_clipping",
+    "gradient_accumalation"
+
 ]
 VALUE_TYPES_DICT = {
     "train_file_path": str,
@@ -72,33 +81,42 @@ VALUE_TYPES_DICT = {
     "char_vocab_path": str,
     "hypernym_vocab_path": str,
     "synonym_vocab_path": str,
-    "time_step": int,
-    "word_embedding_dim": int,
-    "rel_embedding_dim": int,
-    "synonym_embedding_dim": int,
-    "hypernym_embedding_dim": int,
-    "char_embedding_dim": int,
-    "pos_embedding_dim": int,
-    "encoder_hidden_size": int,
-    "combined_embedding_dim": int,
-    "transformer_attn_head": int,
-    "transformer_block": int,
-    "kernel_size": int,
-    "n_filters": int,
-    "max_seq_length": int,
-    "use_transformer": bool,
-    "use_self_attentive": bool,
-    "glstm_hidden_size": int,
-    "elmo_hidden_size": int,
-    "flair_hidden_size": int,
-    "distant_embedding_dim": int,
-    "max_distant": int,
-    "drop_out": float,
-    "ner_classes": int,
-    "relation_classes": int,
-    "lstm_layers": int,
-    "ner_hidden_size": int,
-    "use_ner": bool,
+    "word2vec_path":str,
+
+    "time_step":int,
+    "word_embedding_dim":int,
+    "rel_embedding_dim":int,
+    "synonym_embedding_dim":int,
+    "hypernym_embedding_dim":int,
+    "char_embedding_dim":int,
+    "pos_embedding_dim":int,
+    "encoder_hidden_size":int,
+    "combined_embedding_dim":int,
+    "transformer_attn_head":int,
+    "transformer_block":int,
+    "kernel_size":int,
+    "n_filters":int,
+    "max_seq_length":int,
+    "use_transformer":bool,
+    "use_self_attentive":bool,
+
+    "glstm_hidden_size":int,
+    "elmo_hidden_size":int,
+    "flair_hidden_size":int,
+    "distant_embedding_dim":int,
+    "max_distant":int,
+    "drop_out":float,
+    "ner_classes":int,
+    "relation_classes":int,
+    "lstm_layers":int,
+    "ner_hidden_size":int,
+    "use_ner":bool,
+
+    "batch_size":int,
+    "lr":float,
+    "gradient_clipping":float,
+    "gradient_accumalation":int
+
 }
 
 
@@ -146,6 +164,8 @@ class CDRConfig:
             raise Exception(f"params: {missing_params} must be defined")
         for key, value in json_data.items():
             if key not in KEY_NAMES_LIST:
+                print(key)
+                print('-----------------------------')
                 raise Exception(f"all config params must be in the pre-defined list: {KEY_NAMES_LIST}")
             if not isinstance(value, VALUE_TYPES_DICT[key]):
                 raise Exception(f"Param's type not match. given:{type(value)}, expected:{VALUE_TYPES_DICT[key]}")

@@ -13,6 +13,7 @@ from config.cdr_config import CDRConfig
 from dataset.cdr_dataset import CDRDataset
 from model.cdr_model import GraphEncoder, GraphStateLSTM
 from utils.metrics import compute_rel_f1, compute_NER_f1_macro, decode_ner
+from utils.utils import get_mean, seed_all
 
 
 def seed_all(seed):
