@@ -5,12 +5,16 @@ import torch.nn as nn
 import numpy as np
 import random
 
-from tqdm import tqdm
+from tqdm import tqdm_notebook
 from torch.utils.tensorboard import SummaryWriter
+
+from torch.utils.data import DataLoader
 
 
 from config.cdr_config import CDRConfig
+from tqdm import tqdm
 from dataset.cdr_dataset import CDRDataset
+from corpus.cdr_corpus import CDRCorpus
 from model.cdr_model import GraphEncoder, GraphStateLSTM
 from utils.metrics import compute_rel_f1, compute_NER_f1_macro, decode_ner
 from utils.utils import get_mean, seed_all
@@ -21,6 +25,7 @@ def seed_all(seed):
     random.seed(seed)
     torch.cuda.manual_seed(seed)
     torch.manual_seed(seed)
+
 
 def get_mean(lis):
     return sum(lis) / len(lis)
@@ -54,7 +59,7 @@ if __name__ == "__main__":
             train_all_ner_labels,
         ),
         train_elmo_tensor_dict,
-        trainn_flair_tensor_dict,
+        train_flair_tensor_dict,
         train_labels,
     ) = corpus.prepare_features_for_one_dataset(
         config.train_file_path, config.train_elmo_path, config.train_flair_path
@@ -106,12 +111,12 @@ if __name__ == "__main__":
         train_all_out_nodes_idx = dict(train_all_out_nodes_idx, **dev_all_out_nodes_idx)
         train_all_in_edge_label_ids = dict(train_all_in_edge_label_ids, **dev_all_in_edge_label_ids)
         train_all_out_edge_label_ids = dict(train_all_out_edge_label_ids, **dev_all_out_edge_label_ids)
-        train_all_pos_ids = dict(train_all_pos_ids, **dev_all_pos_ids)
-        train_all_char_ids = dict(train_all_char_ids, **dev_all_char_ids)
-        train_all_hypernym_ids = dict(train_all_hypernym_ids, **dev_all_hypernym_ids)
-        train_all_synonym_ids = dict(train_all_synonym_ids, **dev_all_synonym_ids)
-        train_elmo_dict = dict(train_elmo_dict, **dev_elmo_dict)
-        train_flair_dict = dict(train_flair_dict, **dev_flair_dict)
+        train_all_pos_ids = dict(train_all_doc_pos_ids, **dev_all_doc_pos_ids)
+        train_all_char_ids = dict(train_all_doc_char_ids, **dev_all_doc_char_ids)
+        train_all_hypernym_ids = dict(train_all_doc_hypernym_ids, **dev_all_doc_hypernym_ids)
+        train_all_synonym_ids = dict(train_all_doc_synonym_ids, **dev_all_doc_synonym_ids)
+        train_elmo_dict = dict(train_elmo_tensor_dict, **dev_elmo_tensor_dict)
+        train_flair_dict = dict(train_flair_tensor_dict, **dev_flair_tensor_dict)
         train_all_entity_mapping = dict(train_all_entity_mapping, **dev_all_entity_mapping)
         train_all_ner_labels = dict(train_all_ner_labels, **dev_all_ner_labels)
 
@@ -132,15 +137,6 @@ if __name__ == "__main__":
             train_labels + dev_labels,
         )
 
-        train_dataset.set_vocabs(
-            corpus.word_vocab,
-            corpus.rel_vocab,
-            corpus.pos_vocab,
-            corpus.hypernym_vocab,
-            corpus.synonym_vocab,
-            corpus.char_vocab,
-        )
-
     else:
         train_dataset = CDRDataset(
             train_all_doc_token_ids,
@@ -148,12 +144,12 @@ if __name__ == "__main__":
             train_all_out_nodes_idx,
             train_all_in_edge_label_ids,
             train_all_out_edge_label_ids,
-            train_all_pos_ids,
-            train_all_char_ids,
-            train_all_hypernym_ids,
-            train_all_synonym_ids,
-            train_elmo_dict,
-            train_flair_dict,
+            train_all_doc_pos_ids,
+            train_all_doc_char_ids,
+            train_all_doc_hypernym_ids,
+            train_all_doc_synonym_ids,
+            train_elmo_tensor_dict,
+            train_flair_tensor_dict,
             train_all_entity_mapping,
             train_all_ner_labels,
             train_labels,
@@ -165,15 +161,24 @@ if __name__ == "__main__":
             dev_all_out_nodes_idx,
             dev_all_in_edge_label_ids,
             dev_all_out_edge_label_ids,
-            dev_all_pos_ids,
-            dev_all_char_ids,
-            dev_all_hypernym_ids,
-            dev_all_synonym_ids,
-            dev_elmo_dict,
-            dev_flair_dict,
+            dev_all_doc_pos_ids,
+            dev_all_doc_char_ids,
+            dev_all_doc_hypernym_ids,
+            dev_all_doc_synonym_ids,
+            dev_elmo_tensor_dict,
+            dev_flair_tensor_dict,
             dev_all_entity_mapping,
             dev_all_ner_labels,
             dev_labels,
+        )
+
+        dev_dataset.set_vocabs(
+            corpus.word_vocab,
+            corpus.rel_vocab,
+            corpus.pos_vocab,
+            corpus.hypernym_vocab,
+            corpus.synonym_vocab,
+            corpus.char_vocab,
         )
 
     test_dataset = CDRDataset(
@@ -182,15 +187,33 @@ if __name__ == "__main__":
         test_all_out_nodes_idx,
         test_all_in_edge_label_ids,
         test_all_out_edge_label_ids,
-        test_all_pos_ids,
-        test_all_char_ids,
-        test_all_hypernym_ids,
-        test_all_synonym_ids,
-        test_elmo_dict,
-        test_flair_dict,
+        test_all_doc_pos_ids,
+        test_all_doc_char_ids,
+        test_all_doc_hypernym_ids,
+        test_all_doc_synonym_ids,
+        test_elmo_tensor_dict,
+        test_flair_tensor_dict,
         test_all_entity_mapping,
         test_all_ner_labels,
         test_labels,
+    )
+
+    train_dataset.set_vocabs(
+        corpus.word_vocab,
+        corpus.rel_vocab,
+        corpus.pos_vocab,
+        corpus.hypernym_vocab,
+        corpus.synonym_vocab,
+        corpus.char_vocab,
+    )
+
+    test_dataset.set_vocabs(
+        corpus.word_vocab,
+        corpus.rel_vocab,
+        corpus.pos_vocab,
+        corpus.hypernym_vocab,
+        corpus.synonym_vocab,
+        corpus.char_vocab,
     )
 
     train_loader = DataLoader(
@@ -202,7 +225,7 @@ if __name__ == "__main__":
 
     if dev_dataset is not None:
         dev_loader = DataLoader(
-            dev_loader, batch_size=config.batch_size, shuffle=False, collate_fn=dev_dataset.collate_fn
+            dev_dataset, batch_size=config.batch_size, shuffle=False, collate_fn=dev_dataset.collate_fn
         )
 
     encoder = GraphEncoder(
@@ -243,6 +266,8 @@ if __name__ == "__main__":
         drop_out=config.drop_out,
     )
 
+    model.cuda()
+
     weighted = torch.Tensor([1, 3.65]).cuda()
     optimizer = optim.AdamW(model.parameters(), lr=config.lr, weight_decay=0.001)
 
@@ -259,7 +284,7 @@ if __name__ == "__main__":
 
     best_f1 = -1
 
-    for i in range(5):
+    for i in range(3):
 
         loss_epoch = []
         val_loss_epoch = []
@@ -269,7 +294,7 @@ if __name__ == "__main__":
 
         model.train()
 
-        for train_batch in tqdm_notebook(train_loader):
+        for train_batch in tqdm(train_loader):
 
             train_global_step += 1
             model.zero_grad()
@@ -287,7 +312,7 @@ if __name__ == "__main__":
 
                 total_loss.backward()
 
-                if train_global_step % config.gradident_accumalation_step == 0:
+                if train_global_step % config.gradient_accumalation == 0:
                     nn.utils.clip_grad_norm(model.parameters(), config.gradient_clipping)
                     optimizer.step()
                     optimizer.zero_grad()
@@ -303,7 +328,7 @@ if __name__ == "__main__":
                 re_loss = re_criterion(re_logits, label_ids)
                 re_loss.backward()
 
-                if train_global_step % config.gradident_accumalation_step == 0:
+                if train_global_step % config.gradient_accumalation == 0:
                     nn.utils.clip_grad_norm(model.parameters(), config.gradient_clipping)
                     optimizer.step()
                     optimizer.zero_grad()
@@ -333,7 +358,7 @@ if __name__ == "__main__":
             ner_pred_list = []
 
             with torch.no_grad():
-                for val_batch in tqdm_notebook(dev_loader):
+                for val_batch in tqdm(dev_loader):
 
                     val_global_step += 1
 
@@ -389,23 +414,27 @@ if __name__ == "__main__":
 
             # avg_train_rel_loss = get_mean(train_rel_loss)
             avg_dev_rel_loss = get_mean(dev_rel_loss)
-        if len(dev_ner_loss) > 0:
-            avg_dev_ner_loss = get_mean((avg_dev_ner_loss))
-            print(f"epoch:{i+1}, dev_rel_loss:{avg_dev_rel_loss}, dev_ner_loss:{avg_dev_ner_loss}")
-            ner_f1 = compute_NER_f1_macro(ner_pred_list, ner_target_list)
-            print(f"ner f1 score:{ner_f1}")
-        else:
-            print(f"epoch:{i+1}, dev_rel_loss: {avg_dev_rel_loss}")
+            if len(dev_ner_loss) > 0:
+                avg_dev_ner_loss = get_mean(dev_ner_loss)
+                print(f"epoch:{i+1}, dev_rel_loss:{avg_dev_rel_loss}, dev_ner_loss:{avg_dev_ner_loss}")
+                ner_f1 = compute_NER_f1_macro(ner_pred_list, ner_target_list)
+                print(f"ner f1 score:{ner_f1}")
+            else:
+                print(f"epoch:{i+1}, dev_rel_loss: {avg_dev_rel_loss}")
 
-        f1 = compute_rel_f1(target_list, pred_list)
-        print(f"relation f1 score: {f1}")
-        if f1 > best_f1:
-            best_f1 = f1
-            print("performance improved .... Save best model ...")
-            torch.save(model.state_dict(), f"best_model_{best_f1}.pth")
+            f1 = compute_rel_f1(target_list, pred_list)
+            print(f"relation f1 score: {f1}")
+            if f1 > best_f1:
+                best_f1 = f1
+                print("performance improved .... Save best model ...")
+                torch.save(model.state_dict(), f"best_model_{best_f1}.pth")
 
 
 print("Evaluate on test set .......")
+print("Load best checkpoint .....")
+
+model.load_state_dict(torch.load(f"best_model_{best_f1}.pth"))
+model.cuda()
 
 model.eval()
 test_rel_loss = []
@@ -417,7 +446,7 @@ ner_pred_list = []
 
 with torch.no_grad():
 
-    for val_batch in tqdm_notebook(test_loader):
+    for val_batch in tqdm(test_loader):
 
         batch = [t.cuda() for t in val_batch]
         inputs = batch[:-2]
@@ -471,7 +500,7 @@ if len(test_ner_loss) > 0:
     print(f"test ner f1 score:{ner_f1}")
 
 else:
-    print(f"test_rel_loss: {avg_dev_rel_loss}")
+    print(f"test_rel_loss: {avg_test_rel_loss}")
 
-f1 = compute_rel_f1(pred_classes, target_classes)
-print("f1 score on test set: {f1} ")
+f1 = compute_rel_f1(pred_list, target_list)
+print(f"f1 score on test set: {f1} ")
