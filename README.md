@@ -21,7 +21,7 @@ Please intall all prerequisite packages via requirements file
     pip install -r requirements.txt
 ```
 
-All configuration of our model was decribed in the config.json file. To train out model, you can run the following command.
+All configurations of our model was decribed in the config.json file. To train our model, you can run the following command.
 
 ```
     cd src
@@ -33,4 +33,4 @@ All configuration of our model was decribed in the config.json file. To train ou
 |       | Precision | Recall | F1 |
 | :----------- | ----------- | ----------- | ---------- |
 | Our Model      |  52.41      | 71.51 | 60.35 |
-| Our Model + NER   |         | ----------- | ----------- |
+| Our Model + NER   |   51.62      |     64.54 | 62.23 |
