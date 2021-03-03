@@ -33,4 +33,4 @@ All configurations of our model was decribed in the config.json file. To train o
 |       | Precision | Recall | F1 |
 | :----------- | ----------- | ----------- | ---------- |
 | Our Model      |  52.41      | 71.51 | 60.35 |
-| Our Model + NER   |   51.62      |     64.54 | 62.23 |
+| Our Model + NER   |   60.09      |     64.54 | 62.23 |
