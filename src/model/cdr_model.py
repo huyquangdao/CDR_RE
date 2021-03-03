@@ -396,8 +396,8 @@ class GraphEncoder(nn.Module):
             in_embedded = in_embedded.permute(1, 0, 2)
             out_embedded = out_embedded.permute(1, 0, 2)
 
-        g_in = torch.zeros(size=(bs, self.hidden_size)).to(self.device)
-        g_out = torch.zeros(size=(bs, self.hidden_size)).to(self.device)
+        g_in = torch.zeros(size=(bs, self.encoder_hidden_size)).to(self.device)
+        g_out = torch.zeros(size=(bs, self.encoder_hidden_size)).to(self.device)
 
         for t in range(self.time_step):
 

@@ -10,6 +10,8 @@ from itertools import groupby
 from pathlib import Path
 from typing import Any, Dict, List, Tuple, Union
 
+import numpy as np
+
 import nltk
 from nltk.corpus import wordnet as wn
 
@@ -64,9 +66,9 @@ class CDRCorpus:
         with open(tensor_file_path, "rb") as f:
             tensor = pickle.load(f)
             return tensor
-    
+
     def load_numpy(self, numpy_file_path):
-        with open(numpy_file_path, 'rb') as f:
+        with open(numpy_file_path, "rb") as f:
             matrix = np.load(f)
             return matrix
 

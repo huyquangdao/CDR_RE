@@ -48,6 +48,6 @@
     "batch_size": 16,
     "lr": 0.0007,
     "gradient_clipping": 5,
-    "gradident_accumalation": 1,
+    "gradient_accumalation": 1,
     "word2vec_path": "/content/gdrive/My Drive/Word2vec_pubmed_full.npy"
 }
